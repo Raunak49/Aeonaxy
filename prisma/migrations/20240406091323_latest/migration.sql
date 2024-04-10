@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Course" ALTER COLUMN "description" DROP NOT NULL,
+ALTER COLUMN "category" DROP NOT NULL,
+ALTER COLUMN "level" SET DEFAULT 1,
+ALTER COLUMN "popularity" SET DEFAULT 0;

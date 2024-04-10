@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(uuid())
+  email     String   @unique
+  name      String   @unique
+  profileImage String? @default("https://cdn.iconscout.com/icon/free/png-256/avatar-380-456332.png")
+  role      String  @default("user")
+  password  String
+  verified  Boolean @default(false)
+  enrollments Enrollment[] @relation("UserEnroll")
+}
+
+model Course {
+  id          String      @id @default(uuid())
+  title       String
+  description String?
+  category    String?
+  level       Int     @default(1)
+  popularity  Int     @default(0)
+
+  enrollments Enrollment[] @relation("CourseEnroll")
+}
+
+model Enrollment {
+  id        String      @id @default(uuid())
+  userId    String
+  courseId  String
+  User      User     @relation("UserEnroll",fields: [userId], references: [id])
+  Course    Course   @relation("CourseEnroll",fields: [courseId], references: [id])
+
+  @@unique([userId, courseId], name: "userId_courseId")
+}
